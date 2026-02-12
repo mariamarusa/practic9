@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Профиль пользователя</h1>
+        </header>
+        
+        <main>
+            <div id="loading">
+                <p>Загрузка...</p>
+            </div>
+            
+            <div id="profile-data" style="display: none;">
+                <div class="profile-info">
+                    <p><strong>ID:</strong> <span id="user-id"></span></p>
+                    <p><strong>Имя:</strong> <span id="user-username"></span></p>
+                    <p><strong>Email:</strong> <span id="user-email"></span></p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="index.html" class="btn btn-primary" style="width: auto;">На главную</a>
+                    <button onclick="logout()" class="btn btn-logout" style="width: auto;">Выйти</button>
+                </div>
+            </div>
+            
+            <div id="unauthorized" style="display: none; text-align: center;">
+                <p>Необходимо авторизоваться</p>
+                <div style="margin-top: 20px;">
+                    <a href="login.html" class="btn btn-primary" style="width: auto;">Войти</a>
+                    <a href="register.html" class="btn btn-secondary" style="width: auto;">Регистрация</a>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Практическая работа №9</p>
+        </footer>
+    </div>
+    
+    <script>
+        window.onload = async function() {
+            const userId = localStorage.getItem('userId');
+            
+            if (!userId) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('unauthorized').style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/user/${userId}`);
+                const data = await response.json();
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (data.success) {
+                    document.getElementById('profile-data').style.display = 'block';
+                    document.getElementById('user-id').textContent = data.user.id;
+                    document.getElementById('user-username').textContent = data.user.username;
+                    document.getElementById('user-email').textContent = data.user.email;
+                } else {
+                    document.getElementById('unauthorized').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('unauthorized').style.display = 'block';
+            }
+        };
+        
+        function logout() {
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

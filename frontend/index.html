@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Практическая работа №9</h1>
+        </header>
+        
+        <main>
+            <div id="guest-content" style="text-align: center;">
+                <p>Добро пожаловать!</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                    <a href="register.html" class="btn btn-primary" style="width: auto;">Регистрация</a>
+                    <a href="login.html" class="btn btn-secondary" style="width: auto;">Вход</a>
+                </div>
+            </div>
+            
+            <div id="user-content" style="display: none; text-align: center;">
+                <p>Вы авторизованы!</p>
+                <div style="margin-top: 20px;">
+                    <a href="profile.html" class="btn btn-primary" style="width: auto;">Профиль</a>
+                    <button onclick="logout()" class="btn btn-logout" style="width: auto;">Выйти</button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Практическая работа №9</p>
+        </footer>
+    </div>
+    
+    <script>
+        window.onload = function() {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                document.getElementById('guest-content').style.display = 'none';
+                document.getElementById('user-content').style.display = 'block';
+            }
+        };
+        
+        function logout() {
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
